@@ -59,19 +59,15 @@ $(function() {
      * If the menu displays/hides on click.
      */
     describe('The menu', function() {
-        var body, menuIcon;
-        
-        beforeEach(function() {
-            body = $('body');
+        var body = $('body'),
             menuIcon = $('.menu-icon-link');
-        });
     
 
         /* This test checks to see if the menu element is
          * hidden by default. 
          */
         it('is hidden by default', function() {
-            expect(body[0].className).toBe('menu-hidden');
+            expect(body.hasClass('menu-hidden')).toBe(true);
         });
 
         /* This test checks to see if the menu changes visibility
@@ -81,10 +77,11 @@ $(function() {
          */
         it('toggles visiblity when clicked', function() {
             // When the page loads, body has the class 'menu-hidden'
+            // clicking it will take away the class
             menuIcon.trigger('click');
-            expect(body[0].className).toEqual('');
+            expect(body.hasClass('menu-hidden')).toBe(false);
             menuIcon.trigger('click');
-            expect(body[0].className).toEqual('menu-hidden');
+            expect(body.hasClass('menu-hidden')).toBe(true);
         });
     });
     /* The test suite "Initial Entries" checks if our asynchronous
