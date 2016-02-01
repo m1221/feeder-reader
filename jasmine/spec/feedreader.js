@@ -88,43 +88,45 @@ $(function() {
      * requests work correctly. */
     describe('Initial Entries', function() {
         beforeEach(function(done){
-            loadFeed(0, function(){
-                return done();
-            });
+            loadFeed(0, done);
         });
         
         /* This test checks to see that when the loadFeed
          * function is called it completes its work (there is at least
          * a single .entry element within the .feed container).
          */
-        it('has at least one entry in feed container', function(done) {
+        it('has at least one entry in feed container', function() {
             expect($('.feed .entry').length).toBeGreaterThan(0);
-            done();
         });
     });
 
-    /* This test suite "New Feed Selection" checks is our asynchronous requests
+    /* This test suite "New Feed Selection" checks if our asynchronous requests
      * are working correctly and that they are displaying correctly */
     describe('New Feed Selection', function() {
-        var feedBefore;
+        /* Two ansynchronous calls are made. One before 'it', and one 
+         * during 'it'.
+         * feedBefore contains the html of .feed after the first call
+         * feedAfter contains the html of .feed after the second call
+         */
+        var feedBefore, feedAfter;
         
         beforeEach(function(done){
-            // take a snapshot of the feed before requesting requesting/
-            // loading a new feed.
-            feedBefore = $('.feed').html(); 
-            
-            // loadFeed was first called with 0 as the first parameter
-            // to get a different feed we call it with 1
             loadFeed(1, function(){
-                return done();
+                feedBefore = $('.feed').html();
+                done();
             });
         });
         /* This test checks to see that the loadFeed function
          * actually changes the content on the page
          */
         it('loads new feeds', function(done) {
-            expect($('.feed').html()).not.toEqual(feedBefore);
-            done();
+            loadFeed(2, function(){
+                // this code is only executed upon callback.
+                feedAfter = $('.feed').html();
+                expect(feedBefore).not.toEqual(feedAfter);
+                done();
+            });
+            
         });
     });
 }());
